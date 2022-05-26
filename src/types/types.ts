@@ -8,38 +8,45 @@ interface IRobot {
   reset: () => void;
 }
 
-class Robot implements IRobot {
-  battery;
-  constructor(
-    public name: string,
-    public type: RobotType,
-    public message: string
-  ) {
+export default class Robot implements IRobot {
+  battery: number;
+  name: string;
+  constructor(public type: RobotType) {
     this.battery = 100;
+    this.name = this.generateName();
   }
-  reset() {}
+  reset() {
+    this.battery = 100;
+    this.name = this.generateName();
+  }
   work() {
-    console.log(this.message);
-  }
-}
+    let message: string;
 
-export class Cleaner extends Robot {
-  type: RobotType;
-  constructor(name: string) {
-    super(name, "Cleaner", "Larala larita, I clean my little house");
+    switch (this.type) {
+      case "Cleaner":
+        message = "Larala larita, I clean my little house";
+        break;
+      case "Waiter":
+        message = "Do you feel like a mini of fuet?";
+        break;
+      case "Developer":
+        message = "JavaScript is cool - I develop with JavaScript -> I'm cool";
+        break;
+    }
   }
-}
 
-export class Waiter extends Robot {
-  type: RobotType;
-  constructor(name: string) {
-    super(name, "Waiter", "Do you feel like a mini of fuet?");
-  }
-}
+  generateName(): string {
+    let name: string = "";
+    const chars: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-export class Developer extends Robot {
-  type: RobotType;
-  constructor(name: string) {
-    super(name, "Developer", "Do you feel like a mini of fuet?");
+    for (let i = 0; i < 4; i++) {
+      if (i !== 3) {
+        name += chars.charAt(Math.random() * chars.length);
+        continue;
+      }
+      name += Math.floor(Math.random() * (99 - 10) + 10);
+    }
+
+    return name;
   }
 }
